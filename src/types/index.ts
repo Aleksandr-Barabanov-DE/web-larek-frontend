@@ -1,6 +1,4 @@
-
-
-  // КОМПОНЕНТЫ БАЗОВЫХ КЛАССОВ
+// КОМПОНЕНТЫ БАЗОВЫХ КЛАССОВ
 
 /// Типы для реализации базового класса событий
 export type EventName = string | RegExp;
@@ -29,180 +27,102 @@ export type ApiListResponse<Type> = {
 /// Методы запросов к серверу
 export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
 
-
 // КОМПОНЕНТЫ БИЗНЕС ЛОГИКИ
 
-// Отрисовка главной старницы
-export interface IProductItem {
-  id: string;
-  description: string;
-  image: string;
-  title: string;
-  category: string;
-  price: number | null;
+/// Состояние приложения
+export interface IAppState {
+	catalog: IProduct[]; // Каталог продуктов
+	basket: IProduct[]; // Корзина
+	preview: string | null; // Предпросмотр продукта
+	delivery: IDeliveryForm | null; // Данные о доставке
+	contact: IContactForm | null; // Контактные данные
+	order: IOrder | null; // Данные заказа
 }
 
+/// Действия, передаваемые в конструктор
 export interface IActions {
-  onClick: (event: MouseEvent) => void;
+	onClick: (event: MouseEvent) => void; // Обработчик клика
 }
 
-export interface ILarekApi {
-  cdn: string;
-  items: IProductItem[];
-  getListProductCard: () => Promise<IProductItem[]>;
-  postOrderLot: (order: IOrderLot) => Promise<IOrderResult>;
+/// Действия, передаваемые в конструктор успешного заказа
+export interface ISuccessActions {
+	onClick: () => void; // Обработчик клика
 }
 
-// Корзина с товарами
-export interface IBasketModel {
-  basketProducts: IProductItem[];
-  getCounter: () => number;
-  getSumAll: () => number;
-  setSelectedСard(data: IProductItem): void;
-  deleteCardFromBasket(item: IProductItem): void;
-  clearBasket(): void
+/// Информация о доставке
+export interface IDeliveryForm {
+	payment: string; // Способ оплаты
+	address: string; // Адрес доставки
 }
 
-// Модели Карточек
-export interface IDataModel {
-  productCards: IProductItem[];
-  selectedСard: IProductItem;
-  setPreview(item: IProductItem): void;
+/// Контактная информация
+export interface IContactForm {
+	email: string; // Email
+	phone: string; // Телефон
 }
 
-// Данные пользователя
-export interface IFormModel {
-  payment: string;
-  email: string;
-  phone: string;
-  address: string;
-  total: number;
-  items: string[];
-  setOrderAddress(field: string, value: string): void
-  validateOrder(): boolean;
-  setOrderData(field: string, value: string): void
-  validateContacts(): boolean;
-  getOrderLot(): object;
+/// Данные заказа
+export interface IOrder extends IDeliveryForm, IContactForm {
+	total: number; // Общая стоимость
+	items: string[]; // Список товаров
 }
 
-// КОМПОНЕНТЫ ПРЕДСТАВЛЕНИЯ
-
-// Модальные окна 
-
-export interface IModal {
-  open(): void;
-  close(): void;
-  render(): HTMLElement
+/// Данные ответа сервера о заказе
+export interface IOrderResult {
+	id: string; // ID заказа
+	total: number; // Общая стоимость заказа
 }
-/// Данные для отображения внутри модального окна
+
+// КОМПОНЕНТЫ VIEW 
+/// Данные для отображения главной страницы
+export interface IPage {
+	counter: number; // Счетчик
+	catalog: HTMLElement[]; // Элементы каталога
+}
+
+/// Данные о продукте
+export interface IProduct {
+	id: string; // ID продукта
+	title: string; // Название
+	price: number | null; // Цена
+	description: string; // Описание
+	category: string; // Категория
+	image: string; // Изображение
+}
+
+/// Данные для отображения карточки товара
+export interface ICard extends IProduct {
+	index?: string; // Индекс
+	buttonTitle?: string; // Название кнопки
+}
+
+/// Данные для отображения в модальном окне
 export interface IModalData {
-	content: HTMLElement;
+	content: HTMLElement; // Содержимое модального окна
 }
 
-
-// Корзина с товарами 
-
-export interface IBasket {
-  basket: HTMLElement;
-  title: HTMLElement;
-  basketList: HTMLElement;
-  button: HTMLButtonElement;
-  basketPrice: HTMLElement;
-  headerBasketButton: HTMLButtonElement;
-  headerBasketCounter: HTMLElement;
-  renderHeaderBasketCounter(value: number): void;
-  renderSumAll(sumAll: number): void;
-  render(): HTMLElement;
-}
-
-    // "Элемент корзины"
-export interface IBasketItem {
-  basketItem: HTMLElement;
-	index:HTMLElement;
-	title: HTMLElement;
-	price: HTMLElement;
-	buttonDelete: HTMLButtonElement;
-}
-
-//  Карточки товара
-export interface ICard {
-  сardElement: HTMLElement;
-  cardCategory: HTMLElement;
-  cardTitle: HTMLElement;
-  cardImage: HTMLImageElement;
-  cardPrice: HTMLElement;
-}
-
-export interface ICardComponent {
-  text: HTMLElement;
-  button: HTMLElement;
-}
-
-// Форма Контактных данных
-export interface IContacts {
-  formContacts: HTMLFormElement;
-  inputAll: HTMLInputElement[];
-  buttonSubmit: HTMLButtonElement;
-  formErrors: HTMLElement;
-  render(): HTMLElement;
-}
-
-// Форма с адресом
-export interface IOrder {
-  formOrder: HTMLFormElement;
-  buttonAll: HTMLButtonElement[];
-  paymentSelection: String;
-  formErrors: HTMLElement;
-  render(): HTMLElement;
-}
-
-
-
-// интерфейс формы заказа
-export interface IOrderForm {
-  payment?: string;
-  address?: string;
-  phone?: string;
-  email?: string;
-  total?: string | number;
-  }
-  
-  
 /// Данные о состоянии формы
 export interface IFormState {
-	valid: boolean;
-	errors: string[];
+	valid: boolean; // Валидность формы
+	errors: string[]; // Ошибки формы
 }
 
+/// Данные для отображения корзины
+export interface IBasketView {
+	items: HTMLElement[]; // Элементы
+	total: number; // Общая стоимость
+}
 
-  export interface IOrder extends IOrderForm {
-    items: string[];
-  }
-  
-  export interface IOrderLot{
-    payment: string;
-    email: string;
-    phone: string;
-    address: string;
-    total: number;
-    items: string[];
-  }
-  
-  export interface IOrderResult {
-    id: string;
-    total: number;
-  }
-  
-    // тип ошибки формы
-    export type FormErrors = Partial<Record<keyof IOrder, string>>;
-  
+/// Данные для отображения успешного заказа
+export interface ISuccess {
+	total: number; // Общая стоимость
+}
 
-  // Форма удачного заказа 
-  export interface ISuccess {
-    success: HTMLElement;
-    description: HTMLElement;
-    button: HTMLButtonElement;
-    render(total: number): HTMLElement;
-  }
-  
+/// Ошибки формы
+export type FormErrors = Partial<Record<keyof IOrder, string>>; // Ошибки формы
 
+/// Данные о состоянии формы
+export interface IFormState {
+	valid: boolean; // Валидность формы
+	errors: string[]; // Ошибки формы
+}
