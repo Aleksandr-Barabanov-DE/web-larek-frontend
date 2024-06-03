@@ -29,6 +29,13 @@ export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
 
 // КОМПОНЕНТЫ БИЗНЕС ЛОГИКИ
 
+/// Методы  API
+export interface ILarekAPI {
+	getProductList: () => Promise<IProduct[]>;
+	getProductItem: (id: string) => Promise<IProduct>;
+	orderProducts: (order: IOrder) => Promise<IOrderResult>;
+}
+
 /// Состояние приложения
 export interface IAppState {
 	catalog: IProduct[]; // Каталог продуктов
@@ -126,3 +133,4 @@ export interface IFormState {
 	valid: boolean; // Валидность формы
 	errors: string[]; // Ошибки формы
 }
+
