@@ -61,17 +61,18 @@
     margin-bottom: 12px;
     color: $primary;
 
-    &_soft {
-      background-color: $category1;
-    }
-    &_hard {
-      background-color: $category5;
-    }
+
     &_other {
       background-color: $category2;
     }
+    &_softSkill {
+      background-color: $category1;
+    }
     &_additional {
       background-color: $category3;
+    }
+    &_hardSkill {
+      background-color: $category5;
     }
     &_button {
       background-color: $category4;
